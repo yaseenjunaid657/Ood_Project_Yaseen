@@ -1,0 +1,61 @@
+@startuml
+title Class Diagram
+
+skinparam classAttributeIconSize 0
+
+class Customer {
+  +customerId: UUID
+  +name: String
+  +email: String
+  +placeOrder(): Order
+}
+
+class Order {
+  +orderId: UUID
+  +createdAt: DateTime
+  +status: OrderStatus
+  +total(): Money
+  +addLineItem(p: Product, qty: int)
+}
+
+class OrderLineItem {
+  +quantity: int
+  +unitPrice: Money
+  +subtotal(): Money
+}
+
+class Product {
+  +sku: String
+  +name: String
+  +price: Money
+}
+
+class Payment {
+  +paymentId: UUID
+  +amount: Money
+  +state: PaymentState
+  +authorize()
+  +capture()
+}
+
+enum OrderStatus {
+  Draft
+  Submitted
+  Paid
+  Shipped
+  Cancelled
+}
+
+enum PaymentState {
+  Initiated
+  Authorized
+  Captured
+  Failed
+}
+
+Customer "1" o-- "0..*" Order : places >
+Order "1" *-- "1..*" OrderLineItem
+OrderLineItem "*" --> "1" Product
+Order "0..1" --> "1" Payment : paid by >
+
+@enduml
