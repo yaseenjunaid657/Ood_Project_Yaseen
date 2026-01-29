@@ -1,0 +1,31 @@
+@startuml
+title Component Diagram
+
+skinparam componentStyle rectangle
+
+package "Client" {
+  [Web Browser] as Browser
+}
+
+package "Online Store" {
+  [Web UI] as WebUI
+  [Checkout Service] as Checkout
+  [Order Service] as OrderSvc
+  [Inventory Service] as Inv
+  database "Orders DB" as OrdersDB
+}
+
+package "External Systems" {
+  [Payment Provider API] as PayAPI
+  [Shipping Carrier API] as ShipAPI
+}
+
+Browser --> WebUI : HTTPS
+WebUI --> Checkout : REST/JSON
+Checkout --> OrderSvc : gRPC
+Checkout --> PayAPI : HTTPS
+OrderSvc --> OrdersDB : JDBC/SQL
+OrderSvc --> Inv : REST
+OrderSvc --> ShipAPI : HTTPS
+
+@enduml
