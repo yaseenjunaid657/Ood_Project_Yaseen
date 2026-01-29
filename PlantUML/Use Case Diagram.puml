@@ -1,0 +1,30 @@
+@startuml
+title Use Case Diagram
+
+left to right direction
+actor Customer
+actor "Payment Service" as PSP
+actor "Warehouse Clerk" as Clerk
+
+rectangle "Online Store" {
+  usecase "Browse Catalog" as UC1
+  usecase "Add Item to Cart" as UC2
+  usecase "Checkout" as UC3
+  usecase "Pay for Order" as UC4
+  usecase "Ship Order" as UC5
+  usecase "Track Order" as UC6
+
+  UC3 .> UC2 : <<include>>
+  UC3 .> UC4 : <<include>>
+  UC5 .> UC4 : <<extend>>\n(if payment authorized)
+}
+
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC6
+
+PSP --> UC4
+Clerk --> UC5
+
+@enduml
