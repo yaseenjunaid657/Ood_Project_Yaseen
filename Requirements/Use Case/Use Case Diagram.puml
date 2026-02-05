@@ -1,0 +1,90 @@
+@startuml
+title LMS Use Case Diagram 
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+actor Student
+actor Instructor
+actor "Auth Service" as Auth
+actor "Email Service" as Email
+
+rectangle "Learning Management System" {
+
+  usecase "Sign In" as UC1
+  usecase "Enroll in Course" as UC2
+  usecase "View Course Content" as UC3
+  usecase "Submit Assignment" as UC4
+  usecase "Grade Assignment" as UC5
+  usecase "Send Notification" as UC6
+}
+
+Student --> UC1
+Student --> UC2
+Student --> UC3
+Student --> UC4
+
+Instructor --> UC1
+Instructor --> UC3
+Instructor --> UC5
+Instructor --> UC6
+
+Auth --> UC1
+Email --> UC6
+
+UC2 ..> UC1 : <<include>>
+UC4 ..> UC1 : <<include>>
+UC5 ..> UC1 : <<include>>
+UC6 ..> UC4 : <<extend>>
+
+note right of Student
+Primary user who logs in, enrolls in courses,
+views content, and submits assignments.
+end note
+
+note right of Instructor
+Primary user who manages learning activities
+by grading assignments and sending updates.
+end note
+
+note right of Auth
+Secondary external system that authenticates
+users and returns success/failure to the LMS.
+end note
+
+note right of Email
+Secondary external system used by the LMS to
+send emails such as confirmations and announcements.
+end note
+
+note right of UC1
+User signs in and the LMS verifies identity using
+the authentication service before allowing access.
+end note
+
+note right of UC2
+Student enrolls in a course so the LMS can grant
+access to materials and course activities.
+end note
+
+note right of UC3
+Student or Instructor views course resources such as
+lectures, files, announcements, and syllabus content.
+end note
+
+note right of UC4
+Student submits an assignment and the LMS stores the
+submission with a timestamp for instructor review.
+end note
+
+note right of UC5
+Instructor reviews a submission and records a grade
+and feedback so students can see results.
+end note
+
+note right of UC6
+LMS sends email notifications, for example after a
+successful submission or when an instructor announces updates.
+end note
+
+@enduml
